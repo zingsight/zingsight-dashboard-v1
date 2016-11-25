@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
@@ -72,3 +73,6 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 >>>>>>> 7fb4ef0b4211a659e70026f27ec65210782b6a1f
+=======
+
+>>>>>>> 17c31d49192597763d37a25c93e484b2c5bf6e72
