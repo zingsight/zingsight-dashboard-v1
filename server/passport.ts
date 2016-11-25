@@ -1,3 +1,5 @@
+/// <reference path='../src/typings.d.ts' />
+
 import {Passport} from 'passport';
 
 let LocalStrategy = require('passport-local').Strategy;

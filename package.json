@@ -73,6 +73,7 @@
     "zone.js": "^0.6.23"
   },
   "devDependencies": {
+    "@types/node": "^6.0.51",
     "codelyzer": "1.0.0-beta.3",
     "concurrently": "^3.1.0",
     "gulp": "^3.9.1",

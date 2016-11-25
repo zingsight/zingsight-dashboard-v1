@@ -3,19 +3,12 @@
     {{title}}
   </h1>
 
-     <form *ngIf="!submitted" [formGroup]="form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
-          <md-input formControlName="username" required placeholder="Username"></md-input>
-          <md-input formControlName="password" required type="password" placeholder="Password"></md-input>
-          <button type="submit" [disabled]="!loginForm.form.valid" md-raised-button color="primary">Login</button>
-        </form>
-
-        <md-spinner *ngIf="submitted" mode="indeterminate"></md-spinner>
-
-        <p class="error" *ngIf="errorDiagnostic">{{errorDiagnostic}}</p>
-
   <code>
     From Express: {{observable$ | async | json}}
   </code>
+
+  <h2>Login</h2>
+  <app-login></app-login>
 
   <ul>
     <li><a routerLink="dashboard" routerLinkActive="active">Dashboard</a></li>

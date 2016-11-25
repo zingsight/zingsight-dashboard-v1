@@ -3,6 +3,9 @@ import { randomBytes, pbkdf2 } from 'crypto';
 import { sign } from 'jsonwebtoken';
 import { secret, length, digest } from '../config';
 
+import express = require('express');
+const passport = require('passport');
+
 const loginRouter: Router = Router();
 
 const user = {
@@ -32,25 +35,47 @@ loginRouter.post('/signup', function (request: Request, response: Response, next
     });
 });
 
-// login method
-loginRouter.post('/', function (request: Request, response: Response, next: NextFunction) {
+// // login method
+// loginRouter.post('/', function (request: Request, response: Response, next: NextFunction) {
 
-    pbkdf2(request.body.password, user.salt, 10000, length, digest, (err: Error, hash: Buffer) => {
-        if (err) {
-            console.log(err);
-        }
+//     pbkdf2(request.body.password, user.salt, 10000, length, digest, (err: Error, hash: Buffer) => {
+//         if (err) {
+//             console.log(err);
+//         }
 
-        // check if password is active
-        if (hash.toString('hex') === user.hashedPassword) {
+//         // check if password is active
+//         if (hash.toString('hex') === user.hashedPassword) {
 
-            const token = sign({'user': user.username, permissions: []}, secret, { expiresIn: '7d' });
-            response.json({'jwt': token});
+//             const token = sign({'user': user.username, permissions: []}, secret, { expiresIn: '7d' });
+//             response.json({'jwt': token});
 
-        } else {
-            response.json({message: 'Wrong password'});
-        }
+//         } else {
+//             response.json({message: 'Wrong password'});
+//         }
 
+//     });
+// });
+
+loginRouter.post('/', passport.authenticate('local-login', {
+        successRedirect: 'profile',
+        failureRedirect: 'login',
+        failureFlash: true
+    }));
+
+    loginRouter.get('/profile', isLoggedIn, function (req, res, next) {
+    res.render('users/profile', {
+        user: req.user // get the user from session and pass to template
     });
 });
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+    // if user is authenticate in the session, carry on
+    if (req.isAuthenticated()){
+        return next();
+    }
+    // in any other case, redirect to the home
+    res.redirect('/');
+}
 
 export { loginRouter }
