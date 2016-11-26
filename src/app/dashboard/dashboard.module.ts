@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     routing
-  ],
+    ],
   declarations: [
     DashboardComponent
   ],

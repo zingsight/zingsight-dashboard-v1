@@ -4,9 +4,12 @@ import { Store } from '@ngrx/store';
 import { ADD_FEED, REMOVE_FEED } from '../store/feed/feed.actions';
 import { Observable } from 'rxjs';
 
+import { AuthenticationService } from '../shared/services/authentication.service';
+
 @Component({
   selector: 'app-dashboard',
-  templateUrl: 'dashboard.component.html'
+  templateUrl: 'dashboard.component.html',
+  providers: [AuthenticationService]
 })
 export class DashboardComponent {
   form: FormGroup;

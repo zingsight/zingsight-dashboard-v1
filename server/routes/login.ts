@@ -5,13 +5,13 @@ module.exports = function (app, passport) {
     });
 
     app.post('/api/signup', passport.authenticate('local-signup', {
-        successRedirect: 'http://localhost:4200/#/success',
+        successRedirect: 'http://localhost:4200/#/dashboard',
         failureRedirect: 'http://localhost:4200/#/fail',
         failureFlash: true
     }));
 
     app.post('/api/login', passport.authenticate('local-login', {
-        successRedirect: 'http://localhost:4200/#/success',
+        successRedirect: 'http://localhost:4200/#/dashboard',
         failureRedirect: 'http://localhost:4200/#/fail',
         failureFlash: true
     }));

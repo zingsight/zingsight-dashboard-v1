@@ -23,7 +23,9 @@ public user = new User('', '');
      * Innocent until proven guilty
      */
     // this.submitted = true;
-    // this.errorDiagnostic = null;
+    // this.errorDiagnostic = null;'
+
+    console.log('User trying to log in: ' + this.user.email + ' | ' + this.user.password);
 
     this._userService.login(this.user).subscribe(data => {
       this._router.navigate(['/']);

@@ -1,0 +1,22 @@
+{
+  "name": "Zingsight Dashboard",
+  "description": "Dashboard",
+  "main": "dist/server/app.js",
+  "authors": [
+    "Martin Lindgren <martin@zingsight.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/zingsight/zingsight-dashboard-v1",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.5"
+  }
+}
