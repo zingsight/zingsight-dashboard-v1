@@ -7,6 +7,8 @@ let User = require('./models/user');
 
 export function setupStrategies(passport: Passport): void {
 
+console.log(' << Setting upp Passport strategies >> ');
+
     // ====================== //
     // passport session setup //
     // ====================== //
@@ -35,6 +37,7 @@ export function setupStrategies(passport: Passport): void {
             passReqToCallback: true
         },
         function (req, email, password, done) {
+            console.log('In Passport: signup!');
             // async
             process.nextTick(function () {
 
@@ -96,6 +99,7 @@ export function setupStrategies(passport: Passport): void {
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
         function (req, email, password, done) {
+            console.log('In Passport: Login! --> ' + email);
             // first check if the user already exists
             User.findOne({'local.email': email}, function (err, user) {
                 // If there are any error, return the error

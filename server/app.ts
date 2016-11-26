@@ -8,29 +8,31 @@ import * as compression from 'compression';
 import * as passport from 'passport';
 import * as session from 'express-session';
 import * as mongoose from 'mongoose';
+let flash = require('connect-flash');
 
 import {db} from './config';
 
-import { loginRouter } from './routes/login';
+// import { loginRouter } from './routes/login';
 import { protectedRouter } from './routes/protected';
 import { publicRouter } from './routes/public';
 import { feedRouter } from './routes/feed';
 
-const app: express.Application = express();
+let app: express.Application = express();
 
 // app.set('dbUrl', db);
 // we're going to use mongoose to interact with the mongodb
-mongoose.connect('mongodb://testu:hej123@ds139197.mlab.com:39197/zs-test');
+mongoose.connect(db);
 // passport strategies setup
 require('./passport').setupStrategies(passport);
 
 app.use(session({
-    secret: 'ytunolosabe',
+    secret: 'ilovezingsight',
     resave: false,
     saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.disable('x-powered-by');
 
@@ -49,8 +51,9 @@ app.use(cors({
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 // api routes
+
 app.use('/api/secure', protectedRouter);
-app.use('/api/login', loginRouter);
+require('./routes/login')(app, passport);
 app.use('/api/public', publicRouter);
 app.use('/api/feed', feedRouter);
 

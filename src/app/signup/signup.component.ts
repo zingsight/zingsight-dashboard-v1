@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 import {AuthenticationService, User} from '../shared/services/authentication.service';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
+    selector: 'app-signup',
+    templateUrl: './signup.component.html',
     providers: [AuthenticationService]
 })
 
-export class LoginComponent {
+export class SignupComponent {
 
 public user = new User('', '');
 
@@ -18,19 +18,19 @@ public user = new User('', '');
 
     }
 
-    login() {
+    signup() {
     /**
      * Innocent until proven guilty
      */
     // this.submitted = true;
     // this.errorDiagnostic = null;
 
-    this._userService.login(this.user).subscribe(data => {
+    this._userService.signup(this.user).subscribe(data => {
       this._router.navigate(['/']);
-        console.log('<<< USER SIGNED IN >>>');
+        console.log('<<< USER SIGNED UP >>>');
     },
     error => {
-        console.log('<<< ERROR SIGNING IN >>> ' + error);
+        console.log('<<< ERROR SIGNING UP >>> : ' + error);
     //   this.submitted = false;
     //   this.errorDiagnostic = USER_STATUS_CODES[error.status] || USER_STATUS_CODES[500];
     });
