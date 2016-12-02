@@ -46,7 +46,7 @@ import { FeedEffects } from './store/feed/feed.effects';
     StoreLogMonitorModule,
     HttpModule
   ],
-  providers: [CanActivateViaAuthGuard],
+  providers: [CanActivateViaAuthGuard, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -25,10 +25,10 @@ public user = new User('', '');
     // this.submitted = true;
     // this.errorDiagnostic = null;'
 
-    console.log('User trying to log in: ' + this.user.email + ' | ' + this.user.password);
+    console.log('User trying to log in: ' + this.user.username + ' | ' + this.user.password);
 
     this._userService.login(this.user).subscribe(data => {
-      this._router.navigate(['/']);
+    //   this._router.navigate(['/']);
         console.log('<<< USER SIGNED IN >>>');
     },
     error => {

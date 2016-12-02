@@ -12,38 +12,62 @@ let flash = require('connect-flash');
 
 import {db} from './config';
 
-// import { loginRouter } from './routes/login';
+import { loginRouter } from './routes/login';
+import { signupRouter } from './routes/signup';
 import { protectedRouter } from './routes/protected';
 import { publicRouter } from './routes/public';
 import { feedRouter } from './routes/feed';
 
+var passportConfig = require('./passport'); // all passport configuration and provider logic
+
 let app: express.Application = express();
 
-// app.set('dbUrl', db);
-// we're going to use mongoose to interact with the mongodb
-mongoose.connect(db);
-// passport strategies setup
-require('./passport').setupStrategies(passport);
+app.disable('x-powered-by');
 
+// allow cors only for local dev
+// app.use(cors({
+//   origin: 'http://localhost:4200'
+// }));
+
+app.use(json());
+app.use(compression());
+app.use(urlencoded({ extended: true }));
 app.use(session({
     secret: 'ilovezingsight',
     resave: false,
     saveUninitialized: false
 }));
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(flash());
 
-app.disable('x-powered-by');
+app.use(function (req, res, next) {
 
-app.use(json());
-app.use(compression());
-app.use(urlencoded({ extended: true }));
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
 
-// allow cors only for local dev
-app.use(cors({
-  origin: 'http://localhost:4200'
-}));
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Pass to next layer of middleware
+    next();
+});
+
+// passport strategies setup
+app.use(passport.initialize());
+app.use(passport.session());
+
+// require('./passport').setupStrategies(passport);
+
+// app.set('dbUrl', db);
+// we're going to use mongoose to interact with the mongodb
+require('mongoose').Promise = global.Promise;
+mongoose.connect(db);
 
 // app.set('env', 'production');
 
@@ -52,8 +76,14 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 // api routes
 
+app.get('/', function(req, res) {
+  console.log('<< REQUEST >>');
+});
+
 app.use('/api/secure', protectedRouter);
-require('./routes/login')(app, passport);
+app.use('/api/login', loginRouter);
+app.use('/api/signup', signupRouter);
+// require('./routes/login')(app, passport);
 app.use('/api/public', publicRouter);
 app.use('/api/feed', feedRouter);
 
