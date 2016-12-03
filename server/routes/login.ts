@@ -11,7 +11,7 @@ loginRouter.post('/', (request: Request, response: Response, next: Function) => 
     winston.level = 'info';
     winston.log('info', 'loginRouter: post/local, user: ' + request.body.username + '| ' + request.body.password);
 
-    passport.authenticate('local', function (error, user, info) {
+    passport.authenticate('local-login', function (error, user, info) {
         winston.log('info', 'loginRouter: passport/callback');
         winston.log('info', 'Passport response: ' + JSON.stringify(error) + '| ' + JSON.stringify(user) + '| ' + JSON.stringify(info));
         if (!user) {

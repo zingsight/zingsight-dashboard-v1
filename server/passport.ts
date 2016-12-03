@@ -95,36 +95,126 @@ let checkLength = (string, min, max) => {
  * Configuration details are not necessary in the
  * /config/default.json or production file for local strategy.
  */
-passport.use('local-login',
-  new LocalStrategy({
-    usernameField: 'username',
-    passwordField: 'password',
-    passReqToCallback: true
+// passport.use('local-login',
+//   new LocalStrategy({
+//     usernameField: 'username',
+//     passwordField: 'password',
+//     passReqToCallback: true
+//   },
+//     function (request, username, password, done) {
+//       console.log('HELLO OUT THERE!?');
+//       process.nextTick(function () {
+//         console.log('HELLO OUT THERE!?');
+//         /**
+//          * Find one user with the given username
+//          * Verify that one exists, that the user has
+//          * the local provider, and that the password hashs
+//          * match correctly.
+//          */
+//         return User.findOne({ where: { 'username': username } }).then(function (user) {
+//           console.log('HELLO USER: ' + JSON.stringify(user));
+//           if (!user) { return done(null, false); }
+//           if (!user.validPassword(password)) { return done(null, false); }
+//           return done(null, user);
+//         }).catch(function (error) {
+//           return done(error);
+//         }); // end User.findOne()
+
+//       }); // end process.newTick()
+
+//     }) // end function(request...) & new google strategy
+
+// ); // end passport.use()
+
+// # Local Login
+
+  // We are using named strategies since we have one for login and one
+  // for signup
+
+  // By default, if there is no name, it would just be called 'local'
+
+  passport.use('local-login', new LocalStrategy({
+    // By default, local strategy uses username and password
+    usernameField : 'username',
+    passwordField : 'password',
+    // Allow the entire request to be passed back to the callback
+    passReqToCallback : true
   },
-    function (request, username, password, done) {
-      console.log('HELLO OUT THERE!?');
-      process.nextTick(function () {
-        console.log('HELLO OUT THERE!?');
-        /**
-         * Find one user with the given username
-         * Verify that one exists, that the user has
-         * the local provider, and that the password hashs
-         * match correctly.
-         */
-        return User.findOne({ where: { 'local.username': username } }).then(function (user) {
-          console.log('HELLO USER: ' + JSON.stringify(user));
-          if (!user) { return done(null, false); }
-          if (!user.verifyPassword(password)) { return done(null, false); }
-          return done(null, user);
-        }).catch(function (error) {
-          return done(error);
-        }); // end User.findOne()
 
-      }); // end process.newTick()
+  (req, username, password, done) => {
 
-    }) // end function(request...) & new google strategy
+    // ## Data Checks
 
-); // end passport.use()
+    // If the length of the username string is too long/short,
+    // invoke verify callback.
+    // Note that the check is against the bounds of the email
+    // object. This is because emails can be used to login as
+    // well.
+    if (!checkLength(username, bounds.username.minLength, bounds.email.maxLength)) {
+
+      // ### Verify Callback
+
+      // Invoke `done` with `false` to indicate authentication
+      // failure
+      return done(null,
+        false,
+        // Return info message object
+        { loginMessage : 'Invalid username/email length.' }
+      );
+    }
+
+    // If the length of the password string is too long/short,
+    // invoke verify callback
+    if (!checkLength(password, bounds.password.minLength, bounds.password.maxLength)) {
+
+      // ### Verify Callback
+
+      // Invoke `done` with `false` to indicate authentication
+      // failure
+      return done(null,
+        false,
+        // Return info message object
+        { loginMessage : 'Invalid password length.' }
+      );
+    }
+
+    // Find a user whose email or username is the same as the passed
+    // in data
+
+    // Combat case sensitivity by converting username to lowercase
+    // characters
+    winston.log('info', 'Searching for User: ' + username);
+    User.findOne({ username: username }, (err, user) => {
+    winston.log('info', 'Result of serching: ' + JSON.stringify(user) + ' | or error: ' + err);
+
+      // If there are any errors, return the error before anything
+      // else
+      if (err) {
+        return done(err);
+      }
+
+      // If no user is found, return a message
+      if (!user) {
+
+        return done(null,
+          false,
+          { loginMessage : 'That user was not found. ' +
+          'Please enter valid user credentials.' }
+        );
+      }
+
+      // If the user is found but the password is incorrect
+      if (!user.validPassword(password)) {
+
+        return done(null,
+          false,
+          { loginMessage : 'Invalid password entered.' });
+      }
+
+      // Otherwise all is well; return successful user
+      return done(null, user);
+    });
+  }));
 
 
 

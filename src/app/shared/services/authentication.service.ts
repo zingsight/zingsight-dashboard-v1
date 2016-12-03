@@ -31,22 +31,6 @@ export class AuthenticationService {
         return this.http.post('http://localhost:4300/api/login', body, <RequestOptionsArgs>{ headers: headers, withCredentials: true })
             .map((res: Response) => res)
             .catch(this.handleError);
-
-
-        // return this.http.post('', JSON.stringify(user))
-        //     .map((response: Response) => {
-        //         // localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
-        //         // login successful if there's a jwt token in the response
-
-        //         // let user = response.json();
-        //         // console.log('111111In Service: login - user: ' + JSON.stringify(user));
-        //         // if (user && user.token) {
-        //         //     // store user details and jwt token in local storage to keep user logged in between page refreshes
-
-        //         //     console.log('222222In Service: login - user: ' + JSON.stringify(user));
-        //         //     localStorage.setItem('currentUser', JSON.stringify(user));
-        //         // }
-        //     });
     }
 
     signup(user: User) {
