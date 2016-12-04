@@ -4,7 +4,7 @@ import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@an
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-var winston = require('winston');
+let winston = require('winston');
 
 
 export class User {
@@ -17,8 +17,12 @@ export class User {
 export class AuthenticationService {
 
     private loggedIn: boolean = false;
+    token: string;
 
-    constructor(private http: Http) { }
+    constructor(private http: Http) {
+        this.token = localStorage.getItem('token');
+     }
+
 
 
     login(user: User) {
@@ -29,7 +33,12 @@ export class AuthenticationService {
         headers.append('Content-Type', 'application/json');
 
         return this.http.post('http://localhost:4300/api/login', body, <RequestOptionsArgs>{ headers: headers, withCredentials: true })
-            .map((res: Response) => res)
+            .map((res: Response) => {
+                let data = res.json();
+                this.token = data.token;
+                console.log('Token? ' + this.token);
+                localStorage.setItem('token', this.token);
+            })
             .catch(this.handleError);
     }
 
@@ -47,13 +56,12 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        this.loggedIn = false;
-        // localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
     }
 
     isLoggedIn() {
-        console.log('AuthenticationService:isLoggedIn -- ' + this.loggedIn);
-        return this.loggedIn;
+        console.log('IsLoggedIn?: ' + localStorage.getItem('token') + ' = ' + !!localStorage.getItem('token'));
+        return !!localStorage.getItem('token');
     }
 
     private handleError(error: Response) {

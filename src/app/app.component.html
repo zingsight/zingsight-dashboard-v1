@@ -3,18 +3,15 @@
     {{title}}
   </h1>
 
+  <router-outlet></router-outlet>
+
+  
+        <app-logout>Loading ...</app-logout>
+
   <code>
     From Express: {{observable$ | async | json}}
   </code>
-  
-  <app-signup></app-signup>
 
-  <ul>
-    <li><a routerLink="dashboard" routerLinkActive="active">Dashboard</a></li>
-    <li><a routerLink="profile" routerLinkActive="active">Profile</a></li>
-    <li><a routerLink="login" routerLinkActive="active">Login</a></li>
-  </ul>
-  <router-outlet></router-outlet>
 </div>
 
 <!-- Development tools -->

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -10,12 +10,17 @@ import {AuthenticationService, User} from '../shared/services/authentication.ser
     providers: [AuthenticationService]
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
 public user = new User('', '');
 
     constructor(private _userService: AuthenticationService, private _router: Router) {
 
+    }
+
+     ngOnInit() {
+        // reset login status
+        this._userService.logout();
     }
 
     login() {
@@ -28,7 +33,7 @@ public user = new User('', '');
     console.log('User trying to log in: ' + this.user.username + ' | ' + this.user.password);
 
     this._userService.login(this.user).subscribe(data => {
-    //   this._router.navigate(['/']);
+        this._router.navigate(['/dashboard']);
         console.log('<<< USER SIGNED IN >>>');
     },
     error => {

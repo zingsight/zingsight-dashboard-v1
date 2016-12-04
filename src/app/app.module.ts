@@ -14,6 +14,7 @@ import { AuthenticationService } from './shared/services/authentication.service'
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 import { SignupComponent } from './signup/signup.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -25,6 +26,7 @@ import { FeedEffects } from './store/feed/feed.effects';
   declarations: [
     AppComponent,
     LoginComponent,
+    LogoutComponent,
     SignupComponent,
     DashboardComponent
   ],
